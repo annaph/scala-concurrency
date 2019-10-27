@@ -9,4 +9,8 @@ The source code contains different modules for the following chapters:
 
 1. Chapter 1 - Introduction
 
-    a. Module name: **introduction**
+    Module name: **introduction**
+
+2. Chapter 2 - Concurrency on the JVM and the Java Memory Model
+
+	Module name: **java-memory-model**
