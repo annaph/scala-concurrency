@@ -14,3 +14,7 @@ The source code contains different modules for the following chapters:
 2. Chapter 2 - Concurrency on the JVM and the Java Memory Model
 
 	Module name: **java-memory-model**
+	
+3. Chapter 3 - Tradional Building Blocks of Concurrency
+
+	Module name: **blocks**
