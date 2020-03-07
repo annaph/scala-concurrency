@@ -18,3 +18,7 @@ The source code contains different modules for the following chapters:
 3. Chapter 3 - Tradional Building Blocks of Concurrency
 
 	Module name: **blocks**
+
+4. Chapter 4 - Asynchronous Programming with Futures and Promises
+
+	Module name: **futures-and-promises**
