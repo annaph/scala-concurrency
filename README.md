@@ -22,3 +22,7 @@ The source code contains different modules for the following chapters:
 4. Chapter 4 - Asynchronous Programming with Futures and Promises
 
 	Module name: **futures-and-promises**
+
+5. Chapter 5 - Data-Parallel Collections
+
+	Module name: **parallel-collections**
