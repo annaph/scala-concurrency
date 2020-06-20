@@ -29,4 +29,4 @@ The source code contains different modules for the following chapters:
 	
 6. Chapter 6 - Concurrent Programming with Reactive Extensions
 
-	Module name: **reactive_extensions**
+	Module name: **reactive-extensions**
