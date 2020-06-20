@@ -26,3 +26,7 @@ The source code contains different modules for the following chapters:
 5. Chapter 5 - Data-Parallel Collections
 
 	Module name: **parallel-collections**
+	
+6. Chapter 6 - Concurrent Programming with Reactive Extensions
+
+	Module name: **reactive_extensions**
