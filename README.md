@@ -30,3 +30,8 @@ The source code contains different modules for the following chapters:
 6. Chapter 6 - Concurrent Programming with Reactive Extensions
 
 	Module name: **reactive-extensions**
+
+7. Chapter 7 - Software Transactional Memory
+
+	Module name: **transactional-memory**
+

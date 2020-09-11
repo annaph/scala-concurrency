@@ -1,59 +1,11 @@
 package org.learning.concurrency.transactional.memory
 
-import scala.annotation.tailrec
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.stm.{Ref, Txn, atomic}
-
-case class Node(elem: Int, next: Ref[Option[Node]] = Ref(None)) {
-
-  def append(node: Node): Unit = atomic { implicit txn =>
-    @tailrec
-    def go(n: Node): Unit = n.next() match {
-      case None =>
-        n.next update Some(node)
-      case Some(x) =>
-        go(x)
-    }
-
-    go(this)
-  }
-
-  def appendIfEnd(node: Node): Unit = next.single.transform {
-    case x@Some(_) =>
-      x
-    case None =>
-      Some(node)
-  }
-
-  def nextNode: Option[Node] =
-    next.single()
-
-  def lastNode: Node = atomic { implicit txn =>
-    @tailrec
-    def go(n: Node): Node = n.next() match {
-      case Some(x) =>
-        go(x)
-      case None =>
-        n
-    }
-
-    go(this)
-  }
-
-  override def toString: String = atomic { implicit txn =>
-    @tailrec
-    def go(n: Node, acc: StringBuilder): StringBuilder = n.next() match {
-      case None =>
-        acc ++= n.elem.toString
-      case Some(x) =>
-        go(x, acc ++= s"${n.elem.toString}|")
-    }
-
-    go(this, new StringBuilder).toString
-  }
-
-}
+import scala.util.control.Breaks.{break, breakable}
+import scala.util.control.ControlThrowable
+import scala.util.{Failure, Success, Try}
 
 object CompositionSideEffects extends App {
 
@@ -160,5 +112,107 @@ object CompositionList extends App {
 
   node1 appendIfEnd node6
   log(s"Node1 after appendIfEnd: $node1")
+
+}
+
+object CompositionSortedList extends App {
+
+  val sortedList = SortedList()
+
+  val f = Future {
+    sortedList insert 1
+    sortedList insert 4
+  }
+
+  val g = Future {
+    sortedList insert 5
+    sortedList insert 2
+    sortedList insert 3
+  }
+
+  for {
+    _ <- f
+    _ <- g
+  } log(s"sorted list - $sortedList")
+
+  Thread sleep 3000
+
+}
+
+object CompositionExceptions extends App {
+
+  val sortedList = SortedList()
+  sortedList.insert(4).insert(9).insert(1).insert(16)
+
+  log(s"sorted list - $sortedList")
+
+  Future(sortedList pop 2).foreach(_ => log(s"removed 2 elements - $sortedList"))
+  Thread sleep 1000
+
+  Future(sortedList pop 3).failed.foreach(e => log(s"oops $e - $sortedList"))
+  Thread sleep 3000
+
+  Future {
+    atomic { implicit txn =>
+      sortedList pop 1
+      throw new Exception
+    }
+  }.failed.foreach(e => log(s"oops again $e - $sortedList"))
+  Thread sleep 1000
+
+  Future {
+    breakable {
+      atomic { implicit txn =>
+        for (i <- 1 to 3) {
+          sortedList pop i
+          break()
+        }
+      }
+    }
+  }
+  Thread sleep 1000
+  log(s"after removing - $sortedList")
+
+  Future {
+    breakable {
+      atomic.withControlFlowRecognizer(controlThrowable) { implicit txn =>
+        for (i <- 1 to 3) {
+          sortedList pop i
+          break()
+        }
+      }
+    }
+  }
+  Thread sleep 1000
+  log(s"after removing again - $sortedList")
+
+  private def controlThrowable: PartialFunction[Throwable, Boolean] = {
+    case _: ControlThrowable =>
+      false
+  }
+
+}
+
+object CompositionCatchingExceptions extends App {
+
+  val sortedList = SortedList()
+  sortedList.insert(4).insert(9).insert(1).insert(16)
+
+  log(s"sortedList before - $sortedList")
+
+  atomic { implicit txn =>
+    sortedList pop 2
+    log(s"sortedList - $sortedList")
+
+    Try(sortedList pop 3) match {
+      case Success(_) =>
+      case Failure(e) =>
+        log(s"Houston... $e")
+    }
+
+    sortedList pop 1
+  }
+
+  log(s"result - $sortedList")
 
 }
