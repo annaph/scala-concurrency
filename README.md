@@ -35,3 +35,6 @@ The source code contains different modules for the following chapters:
 
 	Module name: **transactional-memory**
 
+8. Chapter 8 - Actors
+
+	Module name: **actors**
