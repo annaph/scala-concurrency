@@ -38,3 +38,7 @@ The source code contains different modules for the following chapters:
 8. Chapter 8 - Actors
 
 	Module name: **actors**
+	
+9. Chapter 9 - Concurrency in Practice
+
+	Module name: **scala-ftp**
