@@ -14,7 +14,7 @@ The source code contains different modules for the following chapters:
 2. Chapter 2 - Concurrency on the JVM and the Java Memory Model
 
 	Module name: **java-memory-model**
-	
+
 3. Chapter 3 - Tradional Building Blocks of Concurrency
 
 	Module name: **blocks**
@@ -26,7 +26,7 @@ The source code contains different modules for the following chapters:
 5. Chapter 5 - Data-Parallel Collections
 
 	Module name: **parallel-collections**
-	
+
 6. Chapter 6 - Concurrent Programming with Reactive Extensions
 
 	Module name: **reactive-extensions**
@@ -38,7 +38,11 @@ The source code contains different modules for the following chapters:
 8. Chapter 8 - Actors
 
 	Module name: **actors**
-	
+
 9. Chapter 9 - Concurrency in Practice
 
 	Module name: **scala-ftp**
+
+10. Chapter 10. Reactors
+
+	Module name: **reactors**
